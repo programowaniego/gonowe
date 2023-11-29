@@ -5,16 +5,18 @@
 #define RESET   ' '//"\x1b[0m"
 #define TLO ' '//"\x1b[0m"
 //#define TLO   "\x1b[48;2;139;69;19m"
+
 #define wiersze 13
-#define kolumny 13
+#define kolumny 15
 typedef struct plansza
 {
     char* wartosci[wiersze * kolumny];    //reprezentacja stanu gry
-    char gracz_na_ruchu;
+    char* gracz_na_ruchu;
 }plansza;
 plansza* utworz_plansze(plansza* nowa){
     plansza* nowa_plansza = (plansza*)malloc(sizeof(plansza));
     
+    nowa_plansza->gracz_na_ruchu = "X";
     for(int i = 0;i < wiersze * kolumny;i++)
         nowa_plansza->wartosci[i] = " ";
 
