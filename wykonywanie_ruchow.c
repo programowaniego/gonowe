@@ -42,7 +42,7 @@ int oddechy(plansza* stol,int pole){    //oddechy pojedynczego pionka
 }
 int liczenie_oddechow_grupy(plansza* stol,int pole,int* sprawdzone,int oddechy_grupy)
 {
-    int dodatki[] = {1,-1,13,-13};
+    int dodatki[] = {1,-1,kolumny,-kolumny};
     if(stol->wartosci[pole] != " " && sprawdzone[pole] == 0){
         oddechy_grupy += oddechy(stol,pole);
         sprawdzone[pole] = 1;
