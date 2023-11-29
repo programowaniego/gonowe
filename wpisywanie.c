@@ -7,16 +7,14 @@ int pozycja = 0;
 printf("Tura %s \nPodaj pole na ktorym chcesz postawic pionek (kolumna , wiersz)(np A1)\n",gracz);  
 scanf("%c%d", &kolumna , &wiersz);
 getchar();
- while(kolumna < 'A'|| kolumna  > 'M' || wiersz < 0 || wiersz > 13 || wiersz == ' ' || kolumna == ' ')
+ while(kolumna < 'A'|| kolumna  > 'A' + kolumny || wiersz < 0 || wiersz > wiersze || wiersz == ' ' || kolumna == ' ')
     {
         printf("podano niewlasciwa wartosc kolumny/wiersza\n");
         printf("Tura %s \n Podaj pole na ktorym chcesz postawic pionek (kolumna , wiersz)(np A1)\n",gracz);  
         scanf("%c%d", &kolumna , &wiersz);
         getchar();
     }
-    pozycja = (wiersz - 1)*13 + kolumna - 'A';
+    pozycja = (wiersz - 1)*kolumny + kolumna - 'A';
     return pozycja;
 }
 #endif
-
-
