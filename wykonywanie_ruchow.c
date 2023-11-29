@@ -1,6 +1,6 @@
 #ifndef wykonywanie_ruchow.c
 typedef struct{
-    int* dostepne_ruchy[169];
+    int* dostepne_ruchy[wiersze * kolumny];
 }ruchy;
 int oddechy(plansza* stol,int pole){    //oddechy pojedynczego pionka
     int oddechy = 4;
