@@ -57,7 +57,7 @@ int liczenie_oddechow_grupy(plansza* stol,int pole,int* sprawdzone,int oddechy_g
 void niszczenie(plansza* stol,int* sprawdzone){
     for(int j = 0;j < wiersze * kolumny;j++){
         if(sprawdzone[j] == 1){
-            printf("zniszczono %s %c%d\n",stol->wartosci[j],j % kolumny + 'A',(j - j % kolumny)/kolumny + 1);
+            printf("zniszczono %s na polu %c%d\n",stol->wartosci[j],j % kolumny + 'A',(j - j % kolumny)/kolumny + 1);
             stol->wartosci[j] = " ";
             sprawdzone[j] = 0;
         }
