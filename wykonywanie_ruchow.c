@@ -80,7 +80,7 @@ int postaw_pionek(plansza* stol,int pole)
             stol->gracz_na_ruchu = "O";
     }
 }
-ruchy* mozliwe_ruchy(ruchy* nowe, plansza* stol){   //tablica ruchow trzeba zrobic
+ruchy* mozliwe_ruchy(ruchy* nowe, plansza* stol){   
     ruchy* dostepne = (ruchy*)malloc(sizeof(ruchy));
     int k = 0;
     for(int i = 0;i < 169;i++){
