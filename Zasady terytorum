@@ -1,0 +1,5 @@
+Program liczy terytorium dla obu z graczy z każdego rogu
+Terytorium liczone z danego rogu dostaje ten gracz którego wartość terytorium jest większa
+Działa to w ten sposób że program licząc terytoium danego gracza porusza się po pustyh polach i odpowiedniego gracza
+Dodaje tylko puste pola
+Kończy liczyć (konkretną gałąź)gdy dotrze pionków przeciwnika
