@@ -1,12 +1,13 @@
 #ifndef Plansza.c
 //kolorki na Linuxa
-#define KOLKO   "\x1b[32m"
-#define KRZYZYK "\x1b[34m"
-#define ZNAK "\x1b[31m"
-#define RESET   "\x1b[0m"
-#define TLO "\x1b[0m"
-//#define TLO   "\x1b[48;2;139;69;19m"
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
+// Kolorowanie tekstu na czerwono nwm czy to dziala wgl 
+//SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+
+// Przywróć domyślne kolory
+//SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_RED);
+}
 #define wiersze 9
 #define kolumny 9
 typedef struct plansza
@@ -45,12 +46,18 @@ void wypisz(plansza* wejscie){
         printf("\n|");
         for(int i = 0;i < kolumny;i++)
         {
-            if(wejscie->wartosci[k * kolumny + i] == "O")
-                printf("  %s%s%s  |",KOLKO,wejscie->wartosci[k * kolumny + i],TLO);
-            else if(wejscie->wartosci[k * kolumny + i] == "1")
-                printf("  %s%s%s  |",ZNAK,wejscie->wartosci[k * kolumny + i],TLO);
-            else
-                printf("  %s%s%s  |",KRZYZYK,wejscie->wartosci[k * kolumny + i],TLO);
+            if(wejscie->wartosci[k * kolumny + i] == "O"){
+                SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+                printf("  %s  |",wejscie->wartosci[k * kolumny + i]);
+            }
+            else if(wejscie->wartosci[k * kolumny + i] == "1"){
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_INTENSITY);
+                printf("  %s  |",wejscie->wartosci[k * kolumny + i]);
+            }
+            else{
+                SetConsoleTextAttribute(hConsole, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+                printf("  %s  |",wejscie->wartosci[k * kolumny + i]);
+            }
         }
         printf(" %d \n|",1 + k);
         for(int i = 0;i < kolumny;i++)
