@@ -69,22 +69,19 @@ int postaw_pionek(plansza* stol,int pole)
         stol->wartosci[pole] = stol->gracz_na_ruchu;  
         for(int i = 0;i < wiersze * kolumny + 1;i++){
             int sprawdzone [wiersze * kolumny] = {};     //wskażnik musi być bo wywala błąd, sprawdzone to lista po to zeby nie chodził w kółko w grupie, zerowanie listy co fora
-            if(i == kolumny * kolumny ? stol->wartosci[pole] != " " && liczenie_oddechow_grupy(stol,pole,sprawdzone,0) == 0 : stol->wartosci[i] != " " && liczenie_oddechow_grupy(stol,i,sprawdzone,0) == 0 && i != pole){  //grupa nie ma oddechow
+            if(i == wiersze * kolumny ? liczenie_oddechow_grupy(stol,pole,sprawdzone,0) == 0 : stol->wartosci[i] != " " && liczenie_oddechow_grupy(stol,i,sprawdzone,0) == 0 && i != pole){  //grupa nie ma oddechow
                niszczenie(stol,sprawdzone); 
             }
         }
         wypisz(stol);
-        if(stol->gracz_na_ruchu == "O")
-            stol->gracz_na_ruchu = "X";
-        else
-            stol->gracz_na_ruchu = "O";
     }
 }
-ruchy* mozliwe_ruchy(ruchy* nowe, plansza* stol){   
+ruchy* mozliwe_ruchy(ruchy* nowe, plansza* stol){ 
     ruchy* dostepne = (ruchy*)malloc(sizeof(ruchy));
     int k = 0;
-    for(int i = 0;i < 169;i++){
+    for(int i = 0;i < wiersze * kolumny;i++){
         if(stol->wartosci[i] == " "){
+            
             dostepne->dostepne_ruchy[k] = i;
             k++;
         }
