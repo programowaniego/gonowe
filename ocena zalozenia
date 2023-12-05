@@ -3,3 +3,6 @@ zwiekszenie terytorium - 50
 zbicie pionka przeciwnika  - 40 
 obrona pionka swojego  - 40
 wygrana moja - 10000
+
+ocena ruchu bedzie polegala na tym ze przegladamy z funkcji któar zwraca liste ruchu
+i sprawdza kazda dostepna pozycje jaka ma ocene
