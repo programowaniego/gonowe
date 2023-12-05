@@ -32,7 +32,6 @@ int ile_pionkow(plansza* stol, int wejscie[] , char gracz)
         return k;
         break;
         case 'O' :
-        {
         int k = 0;
         for(int i = 0 ; i < wiersze * kolumny ; i )
         {
