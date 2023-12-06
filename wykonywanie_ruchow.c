@@ -63,8 +63,9 @@ void niszczenie(plansza* stol,int* sprawdzone){
         }
     }
 }
-int postaw_pionek(plansza* stol,int pole)
+void postaw_pionek(plansza* stol,int pole)
 {
+    plansza* kopia(stol,)
     if(stol->wartosci[pole] == " "){
         stol->wartosci[pole] = stol->gracz_na_ruchu;  
         for(int i = 0;i < wiersze * kolumny + 1;i++){
@@ -73,7 +74,6 @@ int postaw_pionek(plansza* stol,int pole)
                niszczenie(stol,sprawdzone); 
             }
         }
-        wypisz(stol);
     }
 }
 ruchy* mozliwe_ruchy(ruchy* nowe, plansza* stol){ 
