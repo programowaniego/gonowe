@@ -19,11 +19,15 @@ void main()
         stol->gracz_na_ruchu = "X";
 
     }
+    wypisz(stol);
+    printf("%d\n",ile_pionkow(stol,"X"));
+    printf("%d\n",ile_pionkow(stol,"O"));
     for(int i = 1;i <= wiersze*kolumny && 1;i++){
         int polozenie = pozycja(stol);
 
         if(polozenie != 2137){
             postaw_pionek(stol,polozenie);//warunek na puste pole
+            wypisz(stol);
 
         if(stol->gracz_na_ruchu == "O")
                 stol->gracz_na_ruchu = "X";
