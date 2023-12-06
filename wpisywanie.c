@@ -1,39 +1,37 @@
-#ifndef terytorium.c
-
-int terytorium(plansza* stol,int pole,int moje_pole[],char *napotkane){
-    
-    int dodatki[] = {1,-1,kolumny,-kolumny};
-    moje_pole[pole] = 1;
-    stol->wartosci[pole] = "1";
-    
-    for(int i = 0;i < 4;i++){
-        if(pole + dodatki[i] >= 0 && pole + dodatki[i] < wiersze * kolumny && moje_pole[pole + dodatki[i]] == 0){     //nie wychodzimy poza planszę
-            
-            if((pole + dodatki[i] - (pole + dodatki[i]) % kolumny)/kolumny == (pole - pole % kolumny)/kolumny || (pole + dodatki[i])% kolumny == pole % kolumny){ //zapobiegamy zmianie kolumny i wiersza na raz
-                
-                if(stol->wartosci[pole + dodatki[i]] != " "){
-
-                    if(*stol->wartosci[pole + dodatki[i]] != *napotkane && stol->wartosci[pole + dodatki[i]] != "1"){  //sprawdzamy czy funkcja już napotkała taki pionek
-                        *napotkane = *stol->wartosci[pole + dodatki[i]];
-                        printf("%d %c\n",pole + dodatki[i],*napotkane);
-                    }
-                }
-                if(stol->wartosci[pole + dodatki[i]] == " "){ //funkcja idzie dalej kiedy spotka puste pole
-                    
-                    terytorium(stol, pole + dodatki[i],moje_pole,napotkane);
-                }    
+#ifndef wpisywanie.c
+int pozycja(plansza* stol)
+{
+char kolumna;
+int wiersz;
+printf("podaj pole na ktorym chcesz postawic pionek (kolumna , wiersz)(np A1)\n");  
+scanf("%c%d", &kolumna , &wiersz);
+getchar();
+/*while(kolumna < 'A'|| kolumna  > 'M' || wiersz < 0 || wiersz > 13)
+    {
+        printf("podano niewlasciwa wartosc kolumny/wiersza\n");
+        printf("podaj pole na ktorym chcesz postawic pionek (kolumna , wiersz)(np A1)\n");  
+        scanf("%c%d", &kolumna , &wiersz);
+        getchar();
+    }*/
+int moje_pole[wiersze * kolumny] = {};
+char napotkane[5];
+if(wiersz == 0){
+    for(int i = 0;i < wiersze * kolumny;i++){
+        if(moje_pole[i] == 0 && stol->wartosci[i] == " "){
+            if(terytorium(stol,i,moje_pole,&napotkane,0) != 0){
+                printf("terytorium z pola %c%d gracz %s - %d\n",i%kolumny + 'A',(i - i%kolumny)/kolumny + 1,napotkane,ile_pol(stol,moje_pole,0));
+                wypisz(stol);
             }
         }
+        for(int j = 0;j < wiersze * kolumny;j++){
+            if(stol->wartosci[j] == "1")
+                stol->wartosci[j] = " ";
+        }
+        
     }
 }
-int ile_pol(plansza* stol,int wejscie[],int czy_pionki){     //funkcja zliczająca pola terytorium w oparciu o listę moje_pole
-    int k = 0;
-    for(int i = 0;i < wiersze * kolumny;i++){
-        if(stol->wartosci[i] == "1" && !czy_pionki)
-            k++;
-        else if(wejscie[i] && czy_pionki)
-            k++;
-    }
-    return k;
+else
+    return (wiersz - 1)*13 + kolumna - 'A';
+return 2137;
 }
 #endif
