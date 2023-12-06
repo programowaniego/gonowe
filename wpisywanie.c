@@ -14,12 +14,12 @@ getchar();
         getchar();
     }*/
 int moje_pole[wiersze * kolumny] = {};
-char napotkane[5];
 if(wiersz == 0){
     for(int i = 0;i < wiersze * kolumny;i++){
+        char napotkane[2] = {};
         if(moje_pole[i] == 0 && stol->wartosci[i] == " "){
-            if(terytorium(stol,i,moje_pole,&napotkane,0) != 0){
-                printf("terytorium z pola %c%d gracz %s - %d\n",i%kolumny + 'A',(i - i%kolumny)/kolumny + 1,napotkane,ile_pol(stol,moje_pole,0));
+            if(terytorium(stol,i,moje_pole,&napotkane,0) && *napotkane != "n"){
+                printf("terytorium z pola %c%d gracz %c - %d\n",i%kolumny + 'A',(i - i%kolumny)/kolumny + 1,*napotkane,ile_pol(stol,moje_pole,0));
                 wypisz(stol);
             }
         }
