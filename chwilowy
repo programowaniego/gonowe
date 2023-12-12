@@ -1,0 +1,57 @@
+typedef struct 
+{
+    int* pozycja;
+} ruchy
+
+typedef struct element
+{
+    dostepne ruchy;
+    struct element* nastepny; 
+} element;
+
+element* utworz_element(element* glowa, dostepne ruchy)
+{
+    if(glowa)
+    {
+        if (glowa -> nastepny)
+            utworz_element(glowa->nastepny, ruchy);
+        else
+        {
+            glowa->nastepny = malloc(sizeof(element));
+            (glowa->nastepny) = (element) { .ruchy = ruchy, .nastepny = NULL};
+            return glowa;
+        }
+        return glowa;
+    }
+    else
+    {
+        element ptr = malloc(sizeof(element));
+        ptr = (element) { .ruchy = ruchy, .nastepny = NULL };
+        return ptr;
+    }
+}
+
+
+
+
+    element glowa = NULL;
+    int k = 0;
+    for(int i = 0;i < wiersze * kolumny;i++)
+    {
+        if(stol->wartosci[i] == " ")
+        {
+            glowa = utworz_element(glowa , (dostepne) { .pozycja = i})
+        }
+    }
+element* nowy_elem(element* glowa, zespolona liczba)
+{
+    element* nowy = malloc(sizeof(element));
+    nowy = (element) { .liczba = liczba, .nastepny = NULL , .poprzedni = NULL};
+    if (glowa)
+    {
+        for(element pom = glowa; pom->nastepny || !(pom->nastepny = nowy); pom = pom->nastepny);
+        return glowa;
+    }
+    return nowy;
+}
+﻿
