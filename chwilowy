@@ -43,15 +43,5 @@ element* utworz_element(element* glowa, dostepne ruchy)
             glowa = utworz_element(glowa , (dostepne) { .pozycja = i})
         }
     }
-element* nowy_elem(element* glowa, zespolona liczba)
-{
-    element* nowy = malloc(sizeof(element));
-    nowy = (element) { .liczba = liczba, .nastepny = NULL , .poprzedni = NULL};
-    if (glowa)
-    {
-        for(element pom = glowa; pom->nastepny || !(pom->nastepny = nowy); pom = pom->nastepny);
-        return glowa;
-    }
-    return nowy;
-}
+
 ﻿
