@@ -5,7 +5,7 @@ int pozycja(plansza* stol){
     printf("Tura %s \nPodaj pole na ktorym chcesz postawic pionek (kolumna , wiersz)(np A1)\n",stol->gracz_na_ruchu);  
     scanf(" %c%d",&kolumna,&wiersz);
     /*while(kolumna < 'A'|| kolumna  > 'A' + kolumny || wiersz < 1 || wiersz > wiersze )
-    {
+    { 
         printf("Podano niewlasciwa wartosc kolumny/wiersza\n");
         printf("Tura %s \n Podaj pole na ktorym chcesz postawic pionek (kolumna , wiersz)(np A1)\n",stol->gracz_na_ruchu);  
         scanf(" %c%d", &kolumna , &wiersz);
