@@ -1,5 +1,14 @@
 #ifndef wykonywanie_ruchow.c
-
+int ko(plansza* stol,element* lista_posuniec,int posuniecie){
+    if(dlugosc_jedno(lista_posuniec) > 1)
+        printf("%d %d",dlugosc_jedno(lista_posuniec),lista_posuniec->nastepny->dostepne.pozycja);
+    
+    if(dlugosc_jedno(lista_posuniec) > 1 && lista_posuniec->nastepny->dostepne.pozycja == posuniecie)
+        return 0;
+    
+    else 
+        return 1;
+}
 int oddechy(plansza* stol,int pole){    //oddechy pojedynczego pionka
     int oddechy = 4;
     if(pole % kolumny != kolumny - 1){  //Sprawdzanie czy nie jest przy prawej krawędzi
