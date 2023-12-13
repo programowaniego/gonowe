@@ -1,46 +1,52 @@
 #ifndef ocena.c
-typedef struct{
-    int pozycja;
-}ruchy;
-
-typedef struct element{
-    ruchy dostepne;
-    struct element* nastepny;
-}element;
-/*element* utworz_element(element* glowa,ruchy dostepne){ 
-    element* nowy_element = (element*)malloc(sizeof(element));
-    
-    if(nowy_element == NULL)
-    {
-        exit(1);    //obsługa błędnej alokacji pamięci
-    }
-    nowy_element->dostepne = dostepne;
-    nowy_element->nastepny = NULL;
-    
-    return nowy_element;
-}*/
-element* utworz_element(element* glowa, ruchy dostepne)
-{
-    element* nowy = malloc(sizeof(element));
-    *nowy = (element){ nowy->dostepne = dostepne, nowy->nastepny = NULL};
-    if (glowa)
-    {
-        for(element* pom = glowa; pom->nastepny || !(pom->nastepny = nowy); pom = pom->nastepny);
-            return glowa;
-    }
-    return nowy;
+int dlugosc(char wejscie[]){
+    int k = 0;
+    while(wejscie[k])
+        k++;
+    return k;
 }
-element* dostepne_ruchy(plansza* stol,element* glowa){
+int terytorium(plansza* stol,int pole,int moje_pole[],char *napotkane){
     
-    for(int i = 0;i < wiersze * kolumny;i++)
-    {
-        if(stol->wartosci[i] == " ")
-        {
-            glowa = utworz_element(glowa , (ruchy) { .pozycja = i});
+    int dodatki[] = {1,-1,kolumny,-kolumny};
+    moje_pole[pole] = 1;
+    stol->wartosci[pole] = "1";
+     
+    for(int i = 0;i < 4;i++){
+        if(pole + dodatki[i] >= 0 && pole + dodatki[i] < wiersze * kolumny && moje_pole[pole + dodatki[i]] == 0){     //nie wychodzimy poza planszę
             
+            if((pole + dodatki[i] - (pole + dodatki[i]) % kolumny)/kolumny == (pole - pole % kolumny)/kolumny || (pole + dodatki[i])% kolumny == pole % kolumny){ //zapobiegamy zmianie kolumny i wiersza na raz
+                
+                if(stol->wartosci[pole + dodatki[i]] != " " && stol->wartosci[pole + dodatki[i]] != "1"){
+                    
+                    if(*stol->wartosci[pole + dodatki[i]] != napotkane[dlugosc(napotkane) - 1] && dlugosc(napotkane) < 2){  //sprawdzamy czy funkcja już napotkała taki pionek
+                        napotkane[dlugosc(napotkane)] = *stol->wartosci[pole + dodatki[i]];
+                        printf("%d %c\n",pole + dodatki[i],napotkane[dlugosc(napotkane) - 1]);
+                    }
+                }
+                if(stol->wartosci[pole + dodatki[i]] == " "){ //funkcja idzie dalej kiedy spotka puste pole
+                    
+                    terytorium(stol, pole + dodatki[i],moje_pole,napotkane);
+                }    
+            }
         }
     }
-    return glowa;
+}
+int ile_pol(plansza* stol,int wejscie[]){     //funkcja zliczająca pola terytorium w oparciu o listę moje_pole
+    int k = 0;
+    for(int i = 0;i < wiersze * kolumny;i++){
+        if(stol->wartosci[i] == "1")
+            k++;
+    }
+    return k;
+}
+int ile_pionkow(plansza* stol, char* gracz)
+{
+    int k = 0;
+        for(int i = 0 ; i < wiersze * kolumny ; i++ )
+        {
+        if(stol->wartosci[i] == gracz) k++; 
+        }
+    return k;
 }
 int dlugosc_jedno(element* glowa)
     {
@@ -54,41 +60,43 @@ int dlugosc_jedno(element* glowa)
     }
     return i;
     }
-int ocena_pola(plansza* kopia,int ocena,int pole){
+int ocena_pola(plansza* stol,int ocena,int pole){
     int dodatki[] = {1,-1,kolumny,-kolumny};
     for(int j = 0;j < 4;j++){
         
         int sprawdzone[wiersze * kolumny] = {};
         int oddechy_grupy = 0;
 
-        if(pole + dodatki[j] >= 0 && pole + dodatki[j] < wiersze * kolumny && kopia->wartosci[pole + dodatki[j]] != " "){
-            liczenie_oddechow_grupy(kopia,pole + dodatki[j],sprawdzone,&oddechy_grupy);
-            printf("%c%d %d\n",(pole + dodatki[j]) % kolumny + 'A',((pole + dodatki[j]) - (pole + dodatki[j]) % kolumny)/kolumny + 1,oddechy_grupy);
+        if(pole + dodatki[j] >= 0 && pole + dodatki[j] < wiersze * kolumny && stol->wartosci[pole + dodatki[j]] != " "){
+            
+            liczenie_oddechow_grupy(stol,pole + dodatki[j],sprawdzone,&oddechy_grupy);
+            //printf("%c%d %d\n",(pole) % kolumny + 'A',((pole) - (pole) % kolumny)/kolumny + 1,oddechy_grupy);
         }
-        if(kopia->wartosci[pole + dodatki[j]] != " " && kopia->wartosci[pole + dodatki[j]] != kopia->gracz_na_ruchu && oddechy_grupy == 1){
+        if(stol->wartosci[pole + dodatki[j]] != " " && stol->wartosci[pole + dodatki[j]] != stol->gracz_na_ruchu && oddechy_grupy == 1){
                 
             ocena += 40;
-            printf("pole: %c%d ocena - %d\n",pole % kolumny + 'A',(pole - pole % kolumny)/kolumny + 1,ocena);
+            //printf("pole: %c%d ocena - %d\n",pole % kolumny + 'A',(pole - pole % kolumny)/kolumny + 1,ocena);
                 
         }
     }
 }
 int ocena_pozycji(plansza* stol){
-    plansza* kopia = utworz_plansze(kopia,stol->gracz_na_ruchu);
+    //plansza* stol = utworz_plansze(stol,stol->gracz_na_ruchu);
     
     for(int i = 0;i < wiersze * kolumny;i++){
         
-        kopia->wartosci[i] = stol->wartosci[i];
+        stol->wartosci[i] = stol->wartosci[i];
     
     }
         element* glowa = NULL;
-        glowa = dostepne_ruchy(stol,glowa);
+        glowa = dostepne_ruchy(stol,glowa,0,0);
         int dlugosc = dlugosc_jedno(glowa);
+        
         for(int i = 0;i < dlugosc; i++){
-            ocena_pola(kopia,0,glowa->dostepne.pozycja);
+            ocena_pola(stol,0,glowa->dostepne.pozycja);
             glowa = glowa->nastepny;
-            //postaw_pionek(kopia,0);
-            //wypisz(kopia);
+            //postaw_pionek(stol,0);
+            //wypisz(stol);
             //wypisz(stol);
         }   
 }
