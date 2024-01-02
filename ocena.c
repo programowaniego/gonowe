@@ -7,6 +7,14 @@ int dlugosc(char wejscie[]){
     
     return k;
 }
+int ile_pol(plansza* stol){     //funkcja zliczająca pola terytorium w oparciu o listę moje_pole
+    int k = 0;
+    for(int i = 0;i < wiersze * kolumny;i++){
+        if(stol->wartosci[i] == "1")
+            k++;
+    }
+    return k;
+}
 int terytorium(plansza* stol,int pole,int moje_pole[],char *napotkane){
     
     int dodatki[] = {1,-1,kolumny,-kolumny};
@@ -34,13 +42,35 @@ int terytorium(plansza* stol,int pole,int moje_pole[],char *napotkane){
         }
     }
 }
-int ile_pol(plansza* stol){     //funkcja zliczająca pola terytorium w oparciu o listę moje_pole
-    int k = 0;
+int terytorium_po_calosci(plansza* stol,char gracz[2]){
+    int moje_pole[wiersze * kolumny] = {};
     for(int i = 0;i < wiersze * kolumny;i++){
-        if(stol->wartosci[i] == "1")
-            k++;
+            
+        if(moje_pole[i] == 0 && stol->wartosci[i] == " "){      //warunek czy już nie sprawdzone i czy puste i wywolanie terytorium
+            char napotkane[2] = "";
+            terytorium(stol,i,moje_pole,napotkane);    
+            
+            if(dlugosc(napotkane) == 1 && *gracz == napotkane[0]){  
+                
+                if(napotkane[0] == 'O'){    
+                    
+                    //printf("terytorium z pola %c%d gracz %c - %d\n",i%kolumny + 'A',(i - i%kolumny)/kolumny + 1,napotkane[0],ile_pol(stol));
+                    stol->terytoriumO += ile_pol(stol);
+                }
+                
+                if(napotkane[0] == 'X'){
+                    //printf("terytorium z pola %c%d gracz %c - %d\n",i%kolumny + 'A',(i - i%kolumny)/kolumny + 1,napotkane[0],ile_pol(stol));
+                    stol->terytoriumX += ile_pol(stol);
+                }
+                //printf("terytorium niczyje(dami)\n");
+            }  
+            for(int j = 0;j < wiersze * kolumny;j++){
+                
+                if(stol->wartosci[j] == "1")
+                    stol->wartosci[j] = " ";
+            }
+        }
     }
-    return k;
 }
 int ile_pionkow(plansza* stol, char* gracz)     //gracz jest po to żeby funkcja mogła przeliczyć pionki nie tylko gracza na ruchu ale przeciwnika a nawet puste pola
 {
@@ -50,20 +80,6 @@ int ile_pionkow(plansza* stol, char* gracz)     //gracz jest po to żeby funkcja
         if(stol->wartosci[i] == gracz) k++; 
         }
     return k;
-}
-int dlugosc_jedno(element* glowa)
-{
-    if (!glowa) 
-        return 0;
-    
-    int i = 1;
-    
-    while (glowa -> nastepny)
-    {
-        glowa = glowa -> nastepny;
-        i++;
-    }
-    return i;
 }
 int odleglosc_od_srodka(int srodek,int pozycja){
     int odlegloscx = srodek % kolumny - pozycja % kolumny;
@@ -79,23 +95,25 @@ int odleglosc_od_srodka(int srodek,int pozycja){
     return odlegloscx + odlegloscy;
 }
 int ocena_pozycji(plansza* stol){
-    int ocena = 0;
-    int oddechy_grupy = 0;
+    int ocena = 0,oddechy_grupy = 0;
     int moje_pole[wiersze * kolumny] = {};
-
+    
     ocena += 10 * ile_pionkow(stol,stol->gracz_na_ruchu);
-    printf("ocena z pionkow - %d\n",ocena);
+    //printf("ocena z pionkow - %d\n",ocena);
     
     for(int i = 0;i < wiersze * kolumny; i++){
         
         int sprawdzone[wiersze * kolumny] = {};
-        //oddechy_grupy = 0;
         if(stol->wartosci[i] == stol->gracz_na_ruchu){
                 
             liczenie_oddechow_grupy(stol,i,sprawdzone,&oddechy_grupy);
         
         }
-        if(moje_pole[i] == 0 && stol->wartosci[i] == " "){      //warunek czy już nie sprawdzone i czy puste
+        if(stol->wartosci[i] == stol->gracz_na_ruchu)
+            
+            ocena -= odleglosc_od_srodka(wiersze*kolumny/2,i) * 2;
+        
+        /*if(moje_pole[i] == 0 && stol->wartosci[i] == " "){      //warunek czy już nie sprawdzone i czy puste
             
             char napotkane[2] = "";
             terytorium(stol,i,moje_pole,napotkane);
@@ -104,8 +122,8 @@ int ocena_pozycji(plansza* stol){
                 
                 int pomocnicza = 0;
                 pomocnicza = ocena;
-                ocena += ile_pol(stol) * 50;
-                printf("ocena z terytorium- %d\n",ocena - pomocnicza);
+                ocena += ile_pol(stol) * 30;
+                //printf("ocena z terytorium- %d\n",ocena - pomocnicza);
             }
 
             for(int j = 0;j < wiersze * kolumny;j++){
@@ -115,15 +133,20 @@ int ocena_pozycji(plansza* stol){
                     stol->wartosci[j] = " ";
             
             }
+        }*/
         }
-        if(stol->wartosci[i] == stol->gracz_na_ruchu)
-            
-            ocena -= odleglosc_od_srodka(wiersze*kolumny/2,i) * 2;
-    }
+        terytorium_po_calosci(stol,stol->gracz_na_ruchu);
+        
+        ocena += stol->terytoriumO*30; 
+        ocena += stol->terytoriumX*30;
+        
+        stol->terytoriumO = 0;
+        stol->terytoriumX = 0;
     int pomocnicza = 0;
     pomocnicza = ocena;
-    ocena += 1 * oddechy_grupy;
-    printf("ocena z oddechow - %d\n",ocena - pomocnicza);
+    ocena += oddechy_grupy;
+
+    //printf("ocena z oddechow - %d\n",ocena - pomocnicza);
 
     return ocena;
 }
