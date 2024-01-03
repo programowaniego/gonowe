@@ -28,7 +28,7 @@ int terytorium(plansza* stol,int pole,int moje_pole[],char *napotkane){
                 
                 if(stol->wartosci[pole + dodatki[i]] != " " && stol->wartosci[pole + dodatki[i]] != "1"){           //nie liczymy pustych pól i znaczników terytorium(1)
                     
-                    if(*stol->wartosci[pole + dodatki[i]] != napotkane[dlugosc(napotkane) - 1] && dlugosc(napotkane) < 2){  //sprawdzamy czy funkcja już napotkała taki pionek
+                    if(*stol->wartosci[pole + dodatki[i]] != napotkane[dlugosc(napotkane) - 1] && dlugosc(napotkane) < 2){  //sprawdzamy czy funkcja już napotkała taki stol->gracz_na_ruchu
                         
                         napotkane[dlugosc(napotkane)] = *stol->wartosci[pole + dodatki[i]];
                     
@@ -134,6 +134,31 @@ int ocena_pozycji(plansza* stol){
             
             }
         }*/
+        //dwoje oczu
+        if(i % kolumny == kolumny - 1 && stol->wartosci[i] == stol->gracz_na_ruchu )  //Sprawdzanie czy jest przy prawej krawędzi i czy X
+        {
+        if(stol->wartosci[i - 1] == stol->gracz_na_ruchu && stol->wartosci[i - 1 + kolumny] == stol->gracz_na_ruchu && stol->wartosci[i - 1 + 2*kolumny] == stol->gracz_na_ruchu && stol->wartosci[i + 2*kolumny] == stol->gracz_na_ruchu && stol->wartosci[i - 1 + 3*kolumny] == stol->gracz_na_ruchu && stol->wartosci[i - 1 + 4*kolumny] == stol->gracz_na_ruchu&& stol->wartosci[i + 4*kolumny] == stol->gracz_na_ruchu) ocena+=100;
+        }
+        if(i % kolumny == 0 && stol->wartosci[i] == stol->gracz_na_ruchu)  //Sprawdzanie czy jest przy lewej krawędzi  
+        {
+            if(stol->wartosci[i + 1] == stol->gracz_na_ruchu && stol->wartosci[i + 1 + kolumny] == stol->gracz_na_ruchu && stol->wartosci[i + 1 + 2*kolumny] == stol->gracz_na_ruchu && stol->wartosci[i + 2*kolumny] == stol->gracz_na_ruchu && stol->wartosci[i + 1 + 3*kolumny] == stol->gracz_na_ruchu && stol->wartosci[i + 1 + 4*kolumny] == stol->gracz_na_ruchu&& stol->wartosci[i + 4*kolumny] == stol->gracz_na_ruchu) ocena+=100;
+        }
+        if(i < kolumny && stol->wartosci[i] == stol->gracz_na_ruchu)    //Sprawdzanie czy jest przy górnej krawędzi
+        {
+            if(stol->wartosci[i + kolumny ] == stol->gracz_na_ruchu && stol->wartosci[i + kolumny + 1] == stol->gracz_na_ruchu && stol->wartosci[i + kolumny + 2 ] == stol->gracz_na_ruchu && stol->wartosci[i + 2 ] == stol->gracz_na_ruchu && stol->wartosci[i + kolumny + 3] == stol->gracz_na_ruchu&& stol->wartosci[i + kolumny + 4] == stol->gracz_na_ruchu && stol->wartosci[i + 4] == stol->gracz_na_ruchu) ocena+=100;
+        }
+        if(i > kolumny * (kolumny - 1) && stol->wartosci[i] == stol->gracz_na_ruchu) //Sprawdzanie czy jest przy dolnej krawędzi
+        {
+            if(stol->wartosci[i - kolumny ] == stol->gracz_na_ruchu && stol->wartosci[i - kolumny + 1] == stol->gracz_na_ruchu && stol->wartosci[i - kolumny + 2] == stol->gracz_na_ruchu && stol->wartosci[i + 2] == stol->gracz_na_ruchu&& stol->wartosci[i - kolumny + 3] == stol->gracz_na_ruchu && stol->wartosci[i - kolumny + 4] == stol->gracz_na_ruchu&& stol->wartosci[i + 4] == stol->gracz_na_ruchu ) ocena+=100;
+        }
+        //schody
+         if(stol->wartosci[i] == stol->gracz_na_ruchu)
+        {
+            if (stol->wartosci[i - kolumny - 1] == stol->gracz_na_ruchu && stol->wartosci[i - 2 * kolumny - 2] == stol->gracz_na_ruchu && stol->wartosci[i - kolumny + 1] == stol->gracz_na_ruchu && stol->wartosci[i - 2 * kolumny + 2] == stol->gracz_na_ruchu ) ocena+=60;
+            if (stol->wartosci[i - kolumny + 1] == stol->gracz_na_ruchu && stol->wartosci[i - 2 * kolumny + 2] == stol->gracz_na_ruchu && stol->wartosci[i + kolumny + 1] == stol->gracz_na_ruchu && stol->wartosci[i + 2 * kolumny + 2] == stol->gracz_na_ruchu ) ocena+=60;
+            if (stol->wartosci[i + kolumny - 1] == stol->gracz_na_ruchu && stol->wartosci[i + 2 * kolumny - 2] == stol->gracz_na_ruchu && stol->wartosci[i + kolumny + 1] == stol->gracz_na_ruchu && stol->wartosci[i + 2 * kolumny + 2] == stol->gracz_na_ruchu ) ocena+=60;
+            if (stol->wartosci[i + kolumny + 1] == stol->gracz_na_ruchu && stol->wartosci[i + 2 * kolumny + 2] == stol->gracz_na_ruchu && stol->wartosci[i - kolumny + 1] == stol->gracz_na_ruchu && stol->wartosci[i - 2 * kolumny + 2] == stol->gracz_na_ruchu ) ocena+=60;
+        }
         }
         terytorium_po_calosci(stol,stol->gracz_na_ruchu);
         
