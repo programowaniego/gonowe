@@ -25,6 +25,7 @@ void zabij_ruchy(element* ofiara)
 int alfaBeta(plansza* stol,int glebokosc,int alfa,int beta,int* debesciak)
 {
     element* glowa = NULL;
+    //alfa *= -1;
     //element* lista_posuniec = NULL;
     glowa = dostepne_ruchy(stol,glowa,0,0);
     if(!glebokosc || !glowa)
@@ -35,17 +36,18 @@ int alfaBeta(plansza* stol,int glebokosc,int alfa,int beta,int* debesciak)
         do 
         {
             plansza* kopia = utworz_plansze(kopia,stol->gracz_na_ruchu,stol->wartosci,0); //do kopii daję wartosci ze stolu zeby miala takie same
-            //lista_posuniec = dostepne_ruchy(kopia,lista_posuniec,glowa->dostepne.pozycja,1);
-            postaw_pionek(kopia,glowa->dostepne.pozycja);
-            int ocena_czymtasowa = -alfaBeta(kopia,glebokosc - 1,-alfa,-beta,debesciak);
             
+            postaw_pionek(kopia,&glowa->dostepne.pozycja);
+            
+            int ocena_czymtasowa = -alfaBeta(kopia,glebokosc - 1,-alfa,-beta,debesciak);
             kopia->gracz_na_ruchu = stol->gracz_na_ruchu == "O" ? "X" : "O"; //zmiana gracza na ruchu
+            
             
             //printf("ocena - %d\n",ocena_czymtasowa);
             if(ocena_czymtasowa > beta)         //nie ma sensu iść w ten węzeł
                 break;
 
-            if(ocena_czymtasowa < alfa) //&& ko(stol,lista_posuniec,glowa->dostepne.pozycja))
+            if(alfa > ocena_czymtasowa) //&& ko(stol,lista_posuniec,glowa->dostepne.pozycja))
             {
                 alfa = ocena_czymtasowa;
                 *debesciak = glowa->dostepne.pozycja;
