@@ -2,7 +2,6 @@
 #include<stdlib.h>
 #include<malloc.h>
 #include<math.h>
-#include<windows.h>
 #include "Plansza.c"
 #include "wykonywanie_ruchow.c"
 #include "ocena.c"
@@ -28,8 +27,11 @@ void main()
     stol->gracz_na_ruchu = "O";
     wypisz(stol);
     int polozenie = 0, i = 0;
-    while(polozenie != 2137 && i != 81){
-        
+    while(polozenie != 2137 && i != 60){
+        int alfa,beta,debesciak;
+        alfa = 1000;
+        beta = -1000;
+        debesciak = 0;
         if(stol->gracz_na_ruchu == "O")
         {
             /*polozenie = pozycja(stol,lista_posuniec);
@@ -38,10 +40,9 @@ void main()
             wypisz(stol);
             stol->gracz_na_ruchu = "X";*/
             
-            int alfa = 1000, debesciak;
-            int beta = -1000;
-            alfaBeta(stol,4,&alfa,&beta,&debesciak);
-            postaw_pionek(stol,debesciak);
+            
+            alfaBeta(stol,4,&alfa,beta,&debesciak);
+            postaw_pionek(stol,&debesciak);
             wypisz(stol);
             //element* lista_posuniec = dostepne_ruchy(stol,lista_posuniec,polozenie,1);
             stol->gracz_na_ruchu = "X";
@@ -50,10 +51,10 @@ void main()
         }
         else
         {
-            int alfa = 1000, debesciak;
-            int beta = -1000;
-            alfaBeta(stol,4,&alfa,&beta,&debesciak);
-            postaw_pionek(stol,debesciak);
+            //int alfa = 1000, debesciak;
+            //int beta = -1000;
+            alfaBeta(stol,4,&alfa,beta,&debesciak);
+            postaw_pionek(stol,&debesciak);
             wypisz(stol);
             //element* lista_posuniec = dostepne_ruchy(stol,lista_posuniec,polozenie,1);
             stol->gracz_na_ruchu = "O";
