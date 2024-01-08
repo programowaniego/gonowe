@@ -95,9 +95,13 @@ int liczenie_oddechow_grupy(plansza* stol,int pole,int* sprawdzone,int *oddechy_
     if(stol->wartosci[pole] != " " && sprawdzone[pole] == 0){
         *oddechy_grupy += oddechy(stol,pole);
         sprawdzone[pole] = 1;
+        
         for(int i = 0;i < 4;i++){
+            
             if((pole + dodatki[i] - (pole + dodatki[i]) % kolumny)/kolumny == (pole - pole % kolumny)/kolumny || (pole + dodatki[i])% kolumny == pole % kolumny){   //zapobiegamy zmianie wiersza i kolumny na raz(taki krzaczor jest ze wzgledu na liste jednokierunkowa)
+                
                 if(pole + dodatki[i] > 0 && pole + dodatki[i] < wiersze * kolumny && stol->wartosci[pole] == stol->wartosci[pole + dodatki[i]] && sprawdzone[pole + dodatki[i]] == 0){    //znalazl brachola
+                    
                     liczenie_oddechow_grupy(stol,pole + dodatki[i],sprawdzone,oddechy_grupy);
                 }
             }
@@ -116,16 +120,19 @@ void niszczenie(plansza* stol,int* sprawdzone){
         }
     }
 }
-int postaw_pionek(plansza* stol,int pole)
+int postaw_pionek(plansza* stol,int* pole)
 {
-    if(stol->wartosci[pole] == " "){
-        stol->wartosci[pole] = stol->gracz_na_ruchu;  
+    if(stol->wartosci[*pole] == " "){
+        stol->wartosci[*pole] = stol->gracz_na_ruchu;  
         
         for(int i = 0;i < wiersze * kolumny + 1;i++){
+            
             int sprawdzone [wiersze * kolumny] = {};     //sprawdzone to lista po to zeby nie chodził w kółko w grupie, zerowanie listy co fora
             int oddechy_grupy = 0;
-            liczenie_oddechow_grupy(stol,i == wiersze * kolumny ? pole : i ,sprawdzone,&oddechy_grupy);
-            if(oddechy_grupy == 0 && i != pole){  //grupa nie ma oddechow
+            
+            liczenie_oddechow_grupy(stol,i == wiersze * kolumny ? *pole : i ,sprawdzone,&oddechy_grupy);
+            
+            if(oddechy_grupy == 0 && i != *pole){  //grupa nie ma oddechow
                niszczenie(stol,sprawdzone); 
             
             }
